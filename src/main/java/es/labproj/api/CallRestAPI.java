@@ -23,35 +23,34 @@ public class CallRestAPI {
 	
 	
 	@CrossOrigin(origins = "http://localhost:3000")
-	@RequestMapping(value="/home/",  method = RequestMethod.GET)
+	@RequestMapping(value="/artists/",  method = RequestMethod.GET)
 	public ResponseEntity<String> Home() {
 		
-		ResponseEntity<ArtistMain> responses = restTemplate.exchange(
+		ResponseEntity<ArtistChart> responses = restTemplate.exchange(
 				"http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
 				, HttpMethod.GET
 				, null
-				, new ParameterizedTypeReference<ArtistMain>() {}
+				, new ParameterizedTypeReference<ArtistChart>() {}
         );
         List<Artist> artist = responses.getBody().getArtists().getArtist()  ;
 
         String html = "<table border='1' style='width:100%'> "+
                         "<tr>" +
+                        "<th> no</th>" +
                        " <th>Name</th>" +
                         "<th>Playcount</th>" +
                         "<th>Listeners</th>" +
                         "</tr>   ";
-               for(int i=0; i<artist.size();i++){
-
+               for(int i=0; i<artist.size();i++) {
                     html+="<tr>" +
-                        "<td>"+artist.get(i).getName()+"</td>"+
+                        "<td>"+i+"</td>"+
+                        "<td> <a href='http://localhost:8080/artist/?name=" + artist.get(i).getName().replace(" ", "+")+ "'>" +artist.get(i).getName()+"</a> </td>"+
                         "<td>"+artist.get(i).getPlaycount()+"</td>"+
                         "<td>"+artist.get(i).getListeners()+"</td>"+
                     "</tr>";               
                }         
                 html+="</table>";
                 
-                
-		
 		return new ResponseEntity<String>(html, HttpStatus.OK);
 		
 	}

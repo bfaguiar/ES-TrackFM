@@ -7,6 +7,7 @@ public class Artist {
     private String name;
     private String playcount;
     private String listeners;
+    
 
     @Override
     public String toString() {
