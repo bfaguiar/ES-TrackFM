@@ -1,6 +1,5 @@
 package es.labproj.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,7 +19,6 @@ import es.labproj.model.*;
 public class CallRestAPI {
 	
 	static RestTemplate restTemplate = new RestTemplate();
-	
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/artists/",  method = RequestMethod.GET)
@@ -42,8 +40,9 @@ public class CallRestAPI {
                         "<th>Listeners</th>" +
                         "</tr>   ";
                for(int i=0; i<artist.size();i++) {
+                   int j = i+1;
                     html+="<tr>" +
-                        "<td>"+i+"</td>"+
+                        "<td>"+j+"</td>"+
                         "<td> <a href='http://localhost:8080/artist/?name=" + artist.get(i).getName().replace(" ", "+")+ "'>" +artist.get(i).getName()+"</a> </td>"+
                         "<td>"+artist.get(i).getPlaycount()+"</td>"+
                         "<td>"+artist.get(i).getListeners()+"</td>"+
