@@ -1,5 +1,6 @@
 package es.labproj.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.core.ParameterizedTypeReference;
@@ -23,23 +24,35 @@ public class CallRestAPI {
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/home/",  method = RequestMethod.GET)
-	public ResponseEntity<List<Artist>> Home() {
+	public ResponseEntity<String> Home() {
 		
-		ResponseEntity<Artists> responses = restTemplate.exchange(
+		ResponseEntity<ArtistMain> responses = restTemplate.exchange(
 				"http://ws.audioscrobbler.com/2.0/?method=chart.gettopartists&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
 				, HttpMethod.GET
 				, null
-				, new ParameterizedTypeReference<Artists>() {}
+				, new ParameterizedTypeReference<ArtistMain>() {}
         );
-        
+        List<Artist> artist = responses.getBody().getArtists().getArtist()  ;
 
+        String html = "<table border='1' style='width:100%'> "+
+                        "<tr>" +
+                       " <th>Name</th>" +
+                        "<th>Playcount</th>" +
+                        "<th>Listeners</th>" +
+                        "</tr>   ";
+               for(int i=0; i<artist.size();i++){
 
-		System.out.println("\n\n\n\nola\n\n\ns");
-        Artists body = responses.getBody();
-        List<Artist> artist = body.getArtists();
-        
-		System.out.println(artist.get(0).name);
-		return new ResponseEntity<List<Artist>>(artist, HttpStatus.OK);
+                    html+="<tr>" +
+                        "<td>"+artist.get(i).getName()+"</td>"+
+                        "<td>"+artist.get(i).getPlaycount()+"</td>"+
+                        "<td>"+artist.get(i).getListeners()+"</td>"+
+                    "</tr>";               
+               }         
+                html+="</table>";
+                
+                
+		
+		return new ResponseEntity<String>(html, HttpStatus.OK);
 		
 	}
 	
