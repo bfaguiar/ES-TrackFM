@@ -1,6 +1,8 @@
 package es.labproj.api;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -73,8 +75,14 @@ public class CallRestAPI {
             "<td>" +j+ "</td>"  +
             "<td> <a href='http://localhost:8080/artist/?name=" + artist.get(i).getName().replace(" ", "+") + "'>" 
                                                                 + artist.get(i).getName() + "</a> </td>"    +
-            "<td>"+artist.get(i).getPlaycount()+"</td>"+
-            "<td>"+artist.get(i).getListeners()+"</td>"+
+            "<td>"  + NumberFormat.getNumberInstance(Locale.US).format(     // this will add semicollon
+                      Integer.parseInt(artist.get(i).getPlaycount())
+                      ).toString() + 
+            "</td>" +
+            "<td>"  + NumberFormat.getNumberInstance(Locale.US).format(     // this will add semicollon
+                      Integer.parseInt(artist.get(i).getListeners())
+                      ).toString() + 
+            "</td>"+
             "</tr>";  
     
         }
