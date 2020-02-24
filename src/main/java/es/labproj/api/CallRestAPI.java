@@ -31,24 +31,28 @@ public class CallRestAPI {
 				, new ParameterizedTypeReference<ArtistChart>() {}
         );
         List<Artist> artist = responses.getBody().getArtists().getArtist()  ;
+        String html = 
+            "<table border='1' style='width:100%'> "    +
+            "<tr>"                                      +
+            "<th> no</th>"                              +
+            "<th>Name</th>"                             +
+            "<th>Playcount</th>"                        +
+            "<th>Listeners</th>"                        +
+            "</tr>   "                                  ;
 
-        String html = "<table border='1' style='width:100%'> "+
-                        "<tr>" +
-                        "<th> no</th>" +
-                       " <th>Name</th>" +
-                        "<th>Playcount</th>" +
-                        "<th>Listeners</th>" +
-                        "</tr>   ";
-               for(int i=0; i<artist.size();i++) {
-                   int j = i+1;
-                    html+="<tr>" +
-                        "<td>"+j+"</td>"+
-                        "<td> <a href='http://localhost:8080/artist/?name=" + artist.get(i).getName().replace(" ", "+")+ "'>" +artist.get(i).getName()+"</a> </td>"+
-                        "<td>"+artist.get(i).getPlaycount()+"</td>"+
-                        "<td>"+artist.get(i).getListeners()+"</td>"+
-                    "</tr>";               
-               }         
-                html+="</table>";
+        for(int i=0; i<artist.size();i++) {
+
+            int j = i+1;
+            html += "<tr>"      +
+            "<td>" +j+ "</td>"  +
+            "<td> <a href='http://localhost:8080/artist/?name=" + artist.get(i).getName().replace(" ", "+")+ "'>" +artist.get(i).getName()+"</a> </td>" +
+            "<td>"+artist.get(i).getPlaycount()+"</td>"+
+            "<td>"+artist.get(i).getListeners()+"</td>"+
+            "</tr>";  
+
+        }         
+        
+        html+="</table>";
                 
 		return new ResponseEntity<String>(html, HttpStatus.OK);
 		

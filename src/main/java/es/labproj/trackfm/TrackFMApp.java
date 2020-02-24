@@ -6,10 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan({"es.labproj.api"})
-public class DemoApplication {
+public class TrackFMApp {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		SpringApplication.run(TrackFMApp.class, args);
 	}
 
 }
+
+
