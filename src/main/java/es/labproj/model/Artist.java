@@ -1,14 +1,44 @@
 package es.labproj.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@ToString
 public class Artist {
 
-    private @Getter @Setter String name;
-    private @Getter @Setter String playcount;
-    private @Getter @Setter String listeners;
+    private String name;
+    private String playcount;
+    private String listeners;
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPlaycount() {
+        return this.playcount;
+    }
+
+    public void setPlaycount(String playcount) {
+        this.playcount = playcount;
+    }
+
+    public String getListeners() {
+        return this.listeners;
+    }
+
+    public void setListeners(String listeners) {
+        this.listeners = listeners;
+    }
+
+
+    @Override
+    public String toString() {
+        return "{" +
+            " name='" + getName() + "'" +
+            ", playcount='" + getPlaycount() + "'" +
+            ", listeners='" + getListeners() + "'" +
+            "}";
+    }
 
 }

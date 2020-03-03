@@ -2,12 +2,18 @@ package es.labproj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ArtistChart {
+public class ArtistChart{
+    private Artists artists;
 
-    private @Getter @Setter Artists artists;
+	public Artists getArtists() {
+		return artists;
+	}
 
+	public void setArtists(Artists artists) {
+		this.artists = artists;
+	}
+    
+    
 }
+
