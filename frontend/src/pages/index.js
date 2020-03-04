@@ -1,15 +1,23 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 class Index extends Component
 {
-    constructor ()
+    constructor (props)
     {
-        super();
+        super(props);
         this.state = 
         {
             loading : true ,
             artists : [],
+            username : null
         }
+       
+    }
+
+    grabUsername (event)
+    {
+        this.setState({username: event.target.value});
     }
 
     componentDidMount () 
@@ -21,54 +29,73 @@ class Index extends Component
                 {
                     artists: data,
                     isLoading: false
+                    
                 }   
             ));  
-        //https://www.robinwieruch.de/react-fetching-data
+        //https://www.robinwieruch.de/react-fetching-data 
+         //  this.props.history.push('/posts/');
+    }
+
+        
+    
+    handleKeyPress = (event) =>
+    {
+        if(event.key === 'Enter')
+        {
+            this.props.history.push('/user?name='+this.state.username);
+        }
+    
     }
 
     render ()
     {
         const { artists , isLoading} = this.state;
-
+        
+        
         return(
             <div>
                                 
-                <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
-                    <div class="container">
-                    <a class="navbar-brand js-scroll-trigger" href="#page-top">Track FM</a>
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
+                <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+                    <div className="container">
+                    <a className="navbar-brand js-scroll-trigger" href="#page-top">Track FM</a>
+                    <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarResponsive">
-                        <ul class="navbar-nav ml-auto">
-                        <li class="nav-item">
-                            <a class="nav-link js-scroll-trigger" href="#artistscharts">Artist Chart</a>
+                    <div className="collapse navbar-collapse" id="navbarResponsive">
+                        <ul className="navbar-nav ml-auto">
+                        <li className="nav-item">
+                            <a className="nav-link js-scroll-trigger" href="#artistscharts">Artist Chart</a>
                         </li>
                         </ul>
                     </div>
                     </div>
                 </nav>
 
-                <header class="bg-primary text-white">
-                    <div class="container text-center">
+                <header className="bg-primary text-white">
+                    <div className="container text-center">
                     <h1>Track a person</h1>
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon1">@</span>
+                    <div className="input-group mb-3" >
+                        <div className="input-group-prepend" >
+                        <span className="input-group-text" id="basic-addon1">@</span>
                         </div>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"/>
+                        <input name="usernm" type="text" className="form-control " 
+                               placeholder="Username" aria-label="Username" aria-describedby="basic-addon1"
+                               value={undefined} // we cant but username here because its null but its an object
+                               onChange={this.grabUsername.bind(this)}
+                               onKeyPress={this.handleKeyPress}
+                        />
                     </div>
                     </div>
                 </header>
 
                 <section id="artistscharts">
-                    <div class="container">
-                    <div class="row">
-                        <div class="col-lg-8 mx-auto">
+                    <div className="container">
+                    <div className="row">
+                        <div className="col-lg-8 mx-auto">
                         <h2 align="center">Global Top 50 Artist Chart</h2>
                         <br/>
                         <br/>
-                        <table class="table table-striped">
+                        <table className="table table-striped">
                             <thead>
                             <tr>
                                 <th scope="col">#</th>
@@ -83,13 +110,13 @@ class Index extends Component
                                         return(
                                             <tr>
                                                 <th scope="row">{index+1}</th>
-                                                <td>{artist.name}</td>
+                                                <td><a href={"/artist?name="+artist.name}>{artist.name}</a></td>
                                                 <td>{parseInt(artist.playcount).toLocaleString(navigator.language, {minimumFractionDigits: 0})}</td>
                                                 <td>{parseInt(artist.listeners).toLocaleString(navigator.language, {minimumFractionDigits: 0})}</td>
                                             </tr>
                                         );
                                     })
-                                ) : ( <h3> Loading ... </h3> ) }
+                                ) : (<tr><td><h3> Loading ... </h3></td></tr>) }
 
                             </tbody>
                         </table>
@@ -98,9 +125,9 @@ class Index extends Component
                     </div>
                 </section>
 
-                <footer class="py-5 bg-dark">
-                    <div class="container">
-                    <p class="m-0 text-center text-white">Copyright &copy; es.labproj.trackfm</p>
+                <footer className="py-5 bg-dark">
+                    <div className="container">
+                    <p className="m-0 text-center text-white">Copyright &copy; es.labproj.trackfm</p>
                     </div>
                 </footer>
             </div>
@@ -109,6 +136,6 @@ class Index extends Component
 
 }
 
-export default Index;
+export default withRouter(Index);
 
 

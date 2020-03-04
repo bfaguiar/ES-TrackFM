@@ -1,38 +1,49 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
-class Artist extends Component{
-    constructor(){
-        super();
+class Artist extends Component 
+{
+    constructor(props)
+    {
+        super(props);
         this.state = {
             loading : true,
             info : [],
             bio : [],
             stats : [],
-            
         }
     }
-    componentDidMount(){
+    
+    componentDidMount ()
+    {
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
         fetch('http://localhost:8080/artist/?name='+urlParams.get('name'))
         .then(response => response.json())
-            .then(data =>
-                this.setState({
-                    info: data,
-                    isLoading: false,
-                    bio : data.bio,
-                    stats : data.stats,
-                })
-        )
+        .then(data =>
+            this.setState({
+                info: data,
+                isLoading: false,
+                bio : data.bio,
+                stats : data.stats,
+            }))
+        .catch((error) => {
+            console.log("artista not found.")
+            this.props.history.push('/error');
+        });
     }
     
-    render (){
+    render ()
+    {
         return(
                 <div>
                  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
                     <div class="container">
-                    <a class="navbar-brand js-scroll-trigger" href="#page-top">Track FM <b>  artists  </b> </a>
+                    <a role="button" class="btn  btn-light btn-circle btn-sm" aria-pressed="true" href="/">&#x2190;</a>
+                    <p> &nbsp; &nbsp;</p>
+                    <a class="navbar-brand js-scroll-trigger" href="#page-top" >Track FM <b>  artists  </b> </a>
+                    
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
@@ -90,18 +101,6 @@ class Artist extends Component{
                                         </div>
                                     </div>
                                 </div>
-                                <section id="bio" class="bg-light">
-                                    <div class="container">
-                                        <div class="row">
-                                            <div class="col-lg-8 mx-auto">
-                                                <h2>Bio</h2>
-                                                <p class="mt-2 card-text text-muted"  align="justify">{this.state.bio.content}</p>
-                                                <br/>
-                                                <br/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
                                 </div>
                                     ) : (
                                         <h3>Loading...</h3>
@@ -114,8 +113,18 @@ class Artist extends Component{
                 </div>
             </section>
 
-     
-
+            <section id="bio" class="bg-light">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 mx-auto">
+                            <h2>Bio</h2>
+                            <p class="mt-2 card-text text-muted"  align="justify">{this.state.bio.content}</p>
+                            <br/>
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <section id="tags">
                 <div class="container">
@@ -159,4 +168,4 @@ class Artist extends Component{
 
  
 
-export default Artist;
+export default withRouter(Artist);

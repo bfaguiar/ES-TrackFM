@@ -1,33 +1,12 @@
 package es.labproj.model;
+import lombok.Getter;
+import lombok.Setter;
 
 public class ArtistDetails {
-	private String name;
-	private Bio bio;
-	private Stats stats;
-	
-	public Stats getStats() {
-		return stats;
-	}
 
-	public void setStats(Stats stats) {
-		this.stats = stats;
-	}
+	private @Getter @Setter String name;
+	private @Getter @Setter Bio bio;
+	private @Getter @Setter Stats stats;
 
-	public Bio getBio() {
-		return bio;
-	}
-
-	public void setBio(Bio bio) {
-		this.bio = bio;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-	
 	
 }

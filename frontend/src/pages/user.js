@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
 
 class User extends Component
 {
@@ -7,12 +8,28 @@ class User extends Component
         super();
         this.state = 
         {
-            loading : false ,
+            loading : true ,
         }
     }
 
     componentDidMount () 
     {
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        fetch('http://localhost:8080/user/?name='+urlParams.get('name'))
+        .then(response => response.json())
+            .then(data =>
+                this.setState({
+                    info: data,
+                    isLoading: false,
+                    //bio : data.bio,
+                    //stats : data.stats,
+                })
+        ).catch((error) => {
+            console.log("artista not found.")
+            this.props.history.push('/error');
+          });
     }
 
     render ()
@@ -22,6 +39,8 @@ class User extends Component
 
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
                 <div class="container">
+                <a role="button" class="btn  btn-light btn-circle btn-sm" aria-pressed="true" href="/">&#x2190;</a>
+                <p> &nbsp; &nbsp;</p>
                 <a class="navbar-brand js-scroll-trigger" href="#page-top">Track FM <b>users  </b> </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -43,12 +62,6 @@ class User extends Component
                     <li class="nav-item">
                         <a class="nav-link js-scroll-trigger" href="#toptracks">Top tracks</a>
                     </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-                    </li>
-
-                    -->
                     </ul>
                 </div>
                 </div>
@@ -274,4 +287,4 @@ class User extends Component
 
 }
 
-export default User;
+export default withRouter(  User);

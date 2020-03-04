@@ -1,23 +1,13 @@
 package es.labproj.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 public class DateTrack {
-	private String uts;
+
+	private @Getter @Setter String uts;
 	@JsonProperty("#text")
-	private String text;
-	
-	public String getUts() {
-		return uts;
-	}
-	public void setUts(String uts) {
-		this.uts = uts;
-	}
-	public String getText() {
-		return text;
-	}
-	public void setText(String text) {
-		this.text = text;
-	}
+	private @Getter @Setter String text;
 	
 }
