@@ -3,7 +3,7 @@ package es.labproj.model;
 import lombok.Getter;
 import lombok.Setter;
 
-public class Tracks {
+public class Track {
 	
 	private @Getter @Setter ArtistTrack artist;
 	private @Getter @Setter String name;
@@ -11,3 +11,6 @@ public class Tracks {
 	private @Getter @Setter DateTrack date;
 	
 }
+
+
+

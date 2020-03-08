@@ -7,5 +7,5 @@ public class Stats {
 
 	private @Getter @Setter String listeners;
 	private @Getter @Setter String playcount;
-	
+
 }

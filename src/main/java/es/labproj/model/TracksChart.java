@@ -1,6 +1,7 @@
 package es.labproj.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +10,5 @@ import lombok.Setter;
 public class TracksChart {
 	
 	private @Getter @Setter RecentTracks recenttracks;
-	
+
 }

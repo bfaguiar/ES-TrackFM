@@ -26,6 +26,7 @@ public class CallRestAPI {
 	
 	static RestTemplate restTemplate = new RestTemplate();
 	private static final Logger log = LoggerFactory.getLogger(CallRestAPI.class);
+	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/artists/",  method = RequestMethod.GET)
 	public ResponseEntity<List<Artist>> Home() {
@@ -37,28 +38,24 @@ public class CallRestAPI {
 				, new ParameterizedTypeReference<ArtistChart>() {}
         );
         List<Artist> artist = responses.getBody().getArtists().getArtist()  ;
-
-                
+       
 		return new ResponseEntity<List<Artist>>(artist, HttpStatus.OK);
-		
 	}
 	
-	@Scheduled(fixedRate = 5000)
+	//@Scheduled(fixedRate = 5000)
 	@CrossOrigin(origins = "http://localhost:3000")
-	@RequestMapping(value="/user/",  method = RequestMethod.GET)
-	public ResponseEntity<List<Tracks>> User()
+	@RequestMapping(value="/recenttracks/",  method = RequestMethod.GET)
+	public ResponseEntity<List<Track>> RecentTracks(@RequestParam("name") String name)
 	{
 		ResponseEntity<TracksChart> responses = restTemplate.exchange(
-				"http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=buaguiar&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
+				"http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user="+name+"&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
 				, HttpMethod.GET
 				, null
 				, new ParameterizedTypeReference<TracksChart>() {});
 		
-		List<Tracks> tracks = responses.getBody().getRecenttracks().getTrack();	
-		log.info("Tou cá");
+		List<Track> tracks = responses.getBody().getRecenttracks().getTrack();
 		
-		
-		return new ResponseEntity<List<Tracks>>(tracks , HttpStatus.OK);
+		return new ResponseEntity<List<Track>>(tracks , HttpStatus.OK);
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
@@ -71,11 +68,36 @@ public class CallRestAPI {
 				, null
 				, new ParameterizedTypeReference<DetailsChart>() {}
         );
-	
-		
 		return new ResponseEntity<ArtistDetails>(responses.getBody().getArtist(), HttpStatus.OK);
+	}
+	
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/userinfo/", method = RequestMethod.GET)
+	public ResponseEntity<UserDetails> UserDetails(@RequestParam("name") String name)
+	{
+		ResponseEntity<UserDetailsChart> responses = restTemplate.exchange(
+				"http://ws.audioscrobbler.com/2.0/?method=user.getinfo&user="+name+"&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
+				, HttpMethod.GET
+				, null
+				, new ParameterizedTypeReference<UserDetailsChart>() {}
+        );
+		return new ResponseEntity<UserDetails>(responses.getBody().getUser(), HttpStatus.OK);
+	}
+
+	@CrossOrigin(origins = "http://localhost:3000")
+	@RequestMapping(value = "/userartists/", method = RequestMethod.GET)
+	public ResponseEntity<List<ArtistT>> UserArtists(@RequestParam("name") String name)
+	{
+		ResponseEntity<TopChart> responses = restTemplate.exchange(
+				"http://ws.audioscrobbler.com/2.0/?method=user.gettopartists&user="+name+"&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
+				, HttpMethod.GET
+				, null
+				, new ParameterizedTypeReference<TopChart>() {}
+        );
+		return new ResponseEntity<List<ArtistT>>(responses.getBody().getTopartists().getArtist(), HttpStatus.OK);
 	}
 	// API key = 46d61d429e1fcddb75d6b42038a671f5
 	// shared secret = 2cf0450de35bbffcb265741051443ace
 		
 }
+

@@ -34,6 +34,7 @@ class Index extends Component
             ));  
         //https://www.robinwieruch.de/react-fetching-data 
          //  this.props.history.push('/posts/');
+     
     }
 
         
@@ -50,8 +51,7 @@ class Index extends Component
     render ()
     {
         const { artists , isLoading} = this.state;
-        
-        
+        console.log(typeof(artists));
         return(
             <div>
                                 

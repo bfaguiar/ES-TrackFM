@@ -12,4 +12,3 @@ public class Artist {
     private @Getter @Setter String listeners;
 
 }
-

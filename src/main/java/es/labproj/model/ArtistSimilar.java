@@ -3,8 +3,8 @@ package es.labproj.model;
 import lombok.Getter;
 import lombok.Setter;
 
-public class DetailsChart {
+public class ArtistSimilar {
 
-	private @Getter @Setter ArtistDetails artist;
-
+	private @Getter @Setter String name;
+	
 }

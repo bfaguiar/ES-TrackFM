@@ -4,11 +4,9 @@ import java.util.List;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-public class RecentTracks {
+public class Tags {
 
-	private @Getter @Setter List<Track> track;
+	private @Getter @Setter List<Tag> tag;
 	
 }

@@ -8,7 +8,11 @@ class User extends Component
         super();
         this.state = 
         {
-            loading : true ,
+            loading   : true,
+            tracks    : [],
+            album     : [],
+            image     : [],
+            top : []
         }
     }
 
@@ -17,23 +21,36 @@ class User extends Component
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
 
-        fetch('http://localhost:8080/user/?name='+urlParams.get('name'))
-        .then(response => response.json())
-            .then(data =>
-                this.setState({
-                    info: data,
-                    isLoading: false,
-                    //bio : data.bio,
-                    //stats : data.stats,
-                })
-        ).catch((error) => {
-            console.log("artista not found.")
-            this.props.history.push('/error');
-          });
+        this.setState({ isLoading: true });
+                
+        Promise.all([
+            
+            fetch('http://localhost:8080/userinfo/?name=' + urlParams.get('name')),
+            fetch('http://localhost:8080/recenttracks/?name=' + urlParams.get('name')),
+            fetch('http://localhost:8080/userartists/?name=' + urlParams.get('name'))])
+                
+            .then(([res1, res2, res3]) => Promise.all([res1.json(), res2.json(), res3.json()]))
+            .then(([data1, data2, data3]) => this.setState({
+                info: data1,
+                playlists: data1.playlists,
+                playcount: data1.playcount,
+                country  : data1.country,
+                name     : data1.name,
+                image    : data1.image,
+                tracks   : data2,
+                top      : data3,
+                isLoading: false
+
+            })).catch(Error => {
+                console.log("artista not found.")
+                this.props.history.push('/error');
+            });
     }
 
     render ()
     {
+
+        const { info, isLoading, playcount, playlists, country, name, image, tracks, trackAlbum, txt, top} = this.state;
         return (
         <div>
 
@@ -74,25 +91,27 @@ class User extends Component
                     <div class="col-lg-8 mx-auto">
                         <div class="card">
                             <div class="card-body text-center">
-                                <div> <img src="https://img.icons8.com/bubbles/100/000000/administrator-male.png" class="img-lg rounded-circle mb-4" alt="profile image"/>
-                                    <h4>Sam Disanjo</h4>
+                                {!(image == undefined) ? 
+                                <div> <img src={!(image.filter((x, index) => index == 1)[0] == undefined) ? image.filter((x, index) => index == 1)[0]["#text"]
+                                            : console.log("Loading....")} class="img-lg rounded-circle mb-4" alt="profile image"/>
+                                    <h4>{name}</h4>
                                     <p class="text-muted mb-0">User</p>
                                 </div>
+                                : this.props.history.push("/error")}
                                 <br/> 
                                 <div class="border-top pt-3">
                                     <div class="row">
                                         <div class="col-4">
                                             <p>Playlists</p>
-                                            <h6>4354</h6>
-                    
+                                            <h6>{playlists}</h6>
                                         </div>
                                         <div class="col-4">
                                             <p>Playcount</p>
-                                            <h6>455K</h6>
+                                            <h6>{parseInt(playcount).toLocaleString(navigator.language, {minimumFractionDigits: 0})}</h6>
                                         </div>
                                         <div class="col-4">
                                             <p>Country</p>
-                                            <h6>Portugal</h6>
+                                            <h6>{country}</h6>
                                         </div>
                                     </div>
                                 </div>
@@ -121,27 +140,19 @@ class User extends Component
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                        </tr>
+                        {console.log(tracks)}
+                         { !isLoading ? ( tracks.map( (tracks, index) => {
+                                        return(
+                                            <tr>
+                                                <th scope="row">{index+1}</th>
+                                                <td>{tracks.name}</td>
+                                                <td>{tracks.album["#text"]}</td>
+                                                <td><a href={"/artist?name="+tracks.artist["#text"]}>{tracks.artist["#text"]}</a></td>
+                                                <td>{tracks.date != null ? tracks.date["#text"] :<p>Playing</p>}</td>
+                                            </tr>
+                                        );
+                                    })
+                                ) : (<tr><td><h3> Loading ... </h3></td></tr>) }
                         </tbody>
                     </table>
                     </div>
@@ -167,104 +178,15 @@ class User extends Component
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-                </div>
-            </section>
-
-            <section id="topalbums" class="bg-light">
-                <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                    <h2>Top Albums</h2>
-                    <br/>
-                    <br/>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Artist</th>
-                            <th scope="col">Playcount</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    </div>
-                </div>
-                </div>
-            </section>
-
-            <section id="toptracks">
-                <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 mx-auto">
-                    <h2>Top Tracks</h2>
-                    <br/>
-                    <br/>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">#</th>
-                            <th scope="col">Name</th>
-                            <th scope="col">Playcount</th>
-                            <th scope="col">Duration</th>
-                            <th scope="col">Artist</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td>Larry</td>
-                            <td>the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                        </tr>
+                        {!isLoading ? top.map((artist, index) => {
+                            return (
+                                <tr>
+                                    <th scope="row">{index+1}</th>
+                                    <td><a href={"/artist?name="+artist.name}>{artist.name}</a></td>
+                                    <td>{artist.playcount}</td>
+                                </tr>
+                            )
+                        }) : <tr><td><h3>Loading...</h3></td></tr>}
                         </tbody>
                     </table>
                     </div>
