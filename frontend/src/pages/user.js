@@ -37,7 +37,7 @@ class User extends Component
                 country  : data1.country,
                 name     : data1.name,
                 image    : data1.image,
-                tracks   : data2,
+                tracks   : data2.recenttracks.track,
                 top      : data3,
                 isLoading: false
 
