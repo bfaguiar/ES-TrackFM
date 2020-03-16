@@ -16,18 +16,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import es.labproj.trackfm.dbcontroller.AlbumTrackRepository;
+import es.labproj.trackfm.dbcontroller.ArtistTrackRepository;
+import es.labproj.trackfm.dbcontroller.DateTrackRepository;
 import es.labproj.trackfm.dbcontroller.RecentTracksRepository;
+import es.labproj.trackfm.dbcontroller.TrackRepository;
+import es.labproj.trackfm.dbcontroller.TracksChartRepository;
 import es.labproj.trackfm.model.artist.ArtistDetails;
 import es.labproj.trackfm.model.artist.DetailsChart;
 import es.labproj.trackfm.model.artists.Artist;
 import es.labproj.trackfm.model.artists.ArtistChart;
-import es.labproj.trackfm.model.recenttracks.Track;
+import es.labproj.trackfm.model.recenttracks.TracksChart;
 import es.labproj.trackfm.model.userartists.ArtistT;
 import es.labproj.trackfm.model.userartists.TopChart;
 import es.labproj.trackfm.model.userinfo.UserDetailsChart;
 import es.labproj.trackfm.model.userinfo.UserDetails;
 
-//@Component // bean: Component("apiBean bean")
 @Component
 @RestController
 public class CallRestAPI {
@@ -35,7 +39,23 @@ public class CallRestAPI {
 	static RestTemplate restTemplate = new RestTemplate();
 
 	@Autowired
+    TracksChartRepository tracksChartReposity;
+
+
+	@Autowired
 	RecentTracksRepository recentTracksRepository;
+	
+    @Autowired
+    TrackRepository trackReposity;
+
+    @Autowired
+    DateTrackRepository dateTrackRepository;
+
+    @Autowired
+    ArtistTrackRepository artistTrackRepository;
+
+    @Autowired
+    AlbumTrackRepository albumTrackRepository;
 
 	//private static final Logger log = LoggerFactory.getLogger(CallRestAPI.class);
 	
@@ -56,24 +76,13 @@ public class CallRestAPI {
 	
 	@CrossOrigin(origins = "http://localhost:3000")
 	@RequestMapping(value="/recenttracks/",  method = RequestMethod.GET)
-	public ResponseEntity<List<Track>> RecentTracks()
+	public ResponseEntity<TracksChart> RecentTracks()
 	{
-		/*
-		ResponseEntity<TracksChart> responses = restTemplate.exchange(
-				"http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=buaguiar&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
-				, HttpMethod.GET
-				, null
-				, new ParameterizedTypeReference<TracksChart>() {});
-		
-		List<Track> tracks = responses.getBody().getRecenttracks().getTrack();
-		
-		return new ResponseEntity<List<Track>>(tracks , HttpStatus.OK);
-		*/
-
-		Iterable<Track> tracks = recentTracksRepository.findAll();
-		List<Track> recent = new ArrayList<Track> ();
-		tracks.forEach(t -> recent.add(t));
-		return new ResponseEntity<List<Track>>(recent, HttpStatus.OK);
+		Iterable<TracksChart> tracks = tracksChartReposity.findAll();
+		List<TracksChart> lista = new ArrayList<TracksChart>();
+		tracks.forEach(t -> lista.add(t));
+		TracksChart elem = lista.get(0);
+		return new ResponseEntity<TracksChart>(elem, HttpStatus.OK);
 	}
 
 	@CrossOrigin(origins = "http://localhost:3000")

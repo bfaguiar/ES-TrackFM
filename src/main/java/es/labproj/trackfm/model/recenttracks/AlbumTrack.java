@@ -3,7 +3,6 @@ package es.labproj.trackfm.model.recenttracks;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -21,9 +20,6 @@ public class AlbumTrack {
 
 	@JsonProperty("#text")
 	private @Getter @Setter String text;
-
-	@OneToOne
-	private Track track;
 	
-
 }
+

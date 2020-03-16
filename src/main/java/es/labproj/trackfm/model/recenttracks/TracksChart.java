@@ -19,7 +19,7 @@ public class TracksChart {
 	@GeneratedValue
 	private long Id;
 
-	@OneToOne(cascade=CascadeType.ALL, mappedBy="tracksChart")
+	@OneToOne(cascade=CascadeType.ALL)
 	private @Getter @Setter RecentTracks recenttracks;
 
 }	  

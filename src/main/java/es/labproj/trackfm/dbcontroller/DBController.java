@@ -17,18 +17,87 @@ public class DBController {
     CallRestService restService;
 
     @Autowired
+    TracksChartRepository tracksChartReposity;
+
+    @Autowired
     RecentTracksRepository recentTracksRepository;
+
+    @Autowired
+    TrackRepository trackReposity;
+
+    @Autowired
+    DateTrackRepository dateTrackRepository;
+
+    @Autowired
+    ArtistTrackRepository artistTrackRepository;
+
+    @Autowired
+    AlbumTrackRepository albumTrackRepository;
+
+    
+    public void addTracksChart() {
+
+        tracksChartReposity.save(restService.getMostRecentTracks());
+        System.out.println("TracksChart added");
+
+    }
+    
 
     //@Scheduled(fixedRate=1000)
     public void addRecentTracks() {
 
-        List<Track> tracks = restService.getRecentTracks();
-        tracks.forEach( t -> {
+        recentTracksRepository.save(restService.getMostRecentTracks().getRecenttracks());
+        System.out.println("RecentTracks added");
+
+    }
+
+    public void addTracks() {
+
+        List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
+        tracks.forEach(t -> {
             if (t != null) {
-                recentTracksRepository.save(t);
+                trackReposity.save(t);
             }
         });
-        System.out.println("Countries added");
+
+        System.out.println("Tracks Added");
+
     }
+
+    public void addDateTrack() {
+
+        List<Track> dateTracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
+        dateTracks.forEach(t -> {
+            if (t != null) {
+                dateTrackRepository.save(t.getDate());
+            }
+        });
+        System.out.println("Date Added");
+    }
+
+    public void addArtistTrack() {
+
+        List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
+        tracks.forEach(t -> {
+            if (t != null) {
+                artistTrackRepository.save(t.getArtist());
+            }
+        });
+
+        System.out.println("artists added");
+    }
+
+    public void addAlbumTrack() {
+
+        List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
+        tracks.forEach(t -> {
+            if (t != null) {
+                albumTrackRepository.save(t.getAlbum());
+            }
+        });
+
+        System.out.println("Album added");
+    }
+
 }
 

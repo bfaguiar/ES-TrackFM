@@ -4,9 +4,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -20,20 +18,16 @@ public class Track {
 
 	private @Getter @Setter String mbid;
 
-	@OneToOne(cascade=CascadeType.ALL, mappedBy = "track" )
+	@OneToOne(cascade=CascadeType.ALL)
 	private @Getter @Setter ArtistTrack artist;
 
 	private @Getter @Setter String name;
 
-	@OneToOne(cascade=CascadeType.ALL, mappedBy = "track")
+	@OneToOne(cascade=CascadeType.ALL)
 	private @Getter @Setter AlbumTrack album;
 
-	@OneToOne(cascade=CascadeType.ALL, mappedBy = "track") 
+	@OneToOne(cascade=CascadeType.ALL) 
 	private @Getter @Setter DateTrack date;
-
-	@ManyToOne
-	private RecentTracks recentTracks;
-	
 	
 }		
 

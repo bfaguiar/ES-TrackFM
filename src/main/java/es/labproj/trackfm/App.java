@@ -15,13 +15,19 @@ import es.labproj.trackfm.dbcontroller.DBController;
 @EnableJpaRepositories({"es.labproj.trackfm.dbcontroller"})
 @EntityScan({"es.labproj.trackfm.model.recenttracks"})
 //@EnableScheduling
-public class App {
+public class App { 
 
 	public static void main(String[] args) {
+
 		ConfigurableApplicationContext context = SpringApplication.run(App.class, args);
 		DBController dbcontroller = context.getBean(DBController.class);
+		dbcontroller.addTracksChart();
 		dbcontroller.addRecentTracks();
-		//CallRestAPI rapi = context.getBean(CallRestAPI.class);
+		dbcontroller.addTracks();
+		dbcontroller.addDateTrack();
+		dbcontroller.addArtistTrack();
+		dbcontroller.addAlbumTrack();
+		
 	}
 
 }

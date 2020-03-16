@@ -16,14 +16,14 @@ public class CallRestService {
 
     static RestTemplate restTemplate = new RestTemplate();
 
-    public List<Track> getRecentTracks() {
+    public TracksChart getMostRecentTracks() {
         
         ResponseEntity<TracksChart> responses = restTemplate.exchange("http://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=buaguiar&api_key=46d61d429e1fcddb75d6b42038a671f5&format=json"
             , HttpMethod.GET
             , null
             , new ParameterizedTypeReference<TracksChart>() {});
-        
-        return responses.getBody().getRecenttracks().getTrack();
+
+        return responses.getBody();
     }
 
 }
