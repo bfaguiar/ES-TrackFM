@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import es.labproj.trackfm.dbcontroller.client.CallRestService;
@@ -34,7 +35,7 @@ public class DBController {
     @Autowired
     AlbumTrackRepository albumTrackRepository;
 
-    
+    @Scheduled(fixedRate=30000)
     public void addTracksChart() {
 
         tracksChartReposity.save(restService.getMostRecentTracks());
@@ -43,7 +44,7 @@ public class DBController {
     }
     
 
-    //@Scheduled(fixedRate=1000)
+    @Scheduled(fixedRate=30000)
     public void addRecentTracks() {
 
         recentTracksRepository.save(restService.getMostRecentTracks().getRecenttracks());
@@ -51,6 +52,7 @@ public class DBController {
 
     }
 
+    @Scheduled(fixedRate=30000)
     public void addTracks() {
 
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
@@ -64,6 +66,7 @@ public class DBController {
 
     }
 
+    @Scheduled(fixedRate=30000)
     public void addDateTrack() {
 
         List<Track> dateTracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
@@ -75,6 +78,7 @@ public class DBController {
         System.out.println("Date Added");
     }
 
+    @Scheduled(fixedRate=30000)
     public void addArtistTrack() {
 
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
@@ -87,6 +91,7 @@ public class DBController {
         System.out.println("artists added");
     }
 
+    @Scheduled(fixedRate=30000)
     public void addAlbumTrack() {
 
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();

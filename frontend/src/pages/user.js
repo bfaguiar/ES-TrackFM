@@ -26,9 +26,9 @@ class User extends Component
         Promise.all([
             
             fetch('http://localhost:8080/userinfo/?name=' + urlParams.get('name')),
-            fetch('http://localhost:8080/recenttracks/?name=' + urlParams.get('name')),
+            fetch('http://localhost:8080/recenttracks/'),
             fetch('http://localhost:8080/userartists/?name=' + urlParams.get('name'))])
-                
+             
             .then(([res1, res2, res3]) => Promise.all([res1.json(), res2.json(), res3.json()]))
             .then(([data1, data2, data3]) => this.setState({
                 info: data1,
