@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -35,26 +36,32 @@ public class DBController {
     @Autowired
     AlbumTrackRepository albumTrackRepository;
 
+    @Autowired
+    private KafkaTemplate<String,String> kafkaTemplate;
+
+    String kafkaTopic = "jsa-test";
+
     @Scheduled(fixedRate=30000)
     public void addTracksChart() {
 
+        //tracksChartReposity.deleteAll();
         tracksChartReposity.save(restService.getMostRecentTracks());
         System.out.println("TracksChart added");
-
+        kafkaTemplate.send(kafkaTopic, "TracksAdded");
     }
-    
 
     @Scheduled(fixedRate=30000)
     public void addRecentTracks() {
 
+        //recentTracksRepository.deleteAll();
         recentTracksRepository.save(restService.getMostRecentTracks().getRecenttracks());
         System.out.println("RecentTracks added");
 
     }
-
     @Scheduled(fixedRate=30000)
     public void addTracks() {
 
+        //trackReposity.deleteAll();
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
         tracks.forEach(t -> {
             if (t != null) {
@@ -65,10 +72,10 @@ public class DBController {
         System.out.println("Tracks Added");
 
     }
-
     @Scheduled(fixedRate=30000)
     public void addDateTrack() {
 
+        //dateTrackRepository.deleteAll();
         List<Track> dateTracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
         dateTracks.forEach(t -> {
             if (t != null) {
@@ -81,6 +88,7 @@ public class DBController {
     @Scheduled(fixedRate=30000)
     public void addArtistTrack() {
 
+        //artistTrackRepository.deleteAll();
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
         tracks.forEach(t -> {
             if (t != null) {
@@ -94,6 +102,7 @@ public class DBController {
     @Scheduled(fixedRate=30000)
     public void addAlbumTrack() {
 
+        //albumTrackRepository.deleteAll();
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
         tracks.forEach(t -> {
             if (t != null) {
@@ -103,6 +112,5 @@ public class DBController {
 
         System.out.println("Album added");
     }
-
 }
 
