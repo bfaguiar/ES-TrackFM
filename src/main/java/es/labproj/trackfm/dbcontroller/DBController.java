@@ -39,7 +39,7 @@ public class DBController {
     @Autowired
     private KafkaTemplate<String,String> kafkaTemplate;
 
-    String kafkaTopic = "jsa-test";
+    String kafkaTopic = "kafka-trackfm";
 
     @Scheduled(fixedRate=30000)
     public void addTracksChart() {
@@ -47,7 +47,6 @@ public class DBController {
         //tracksChartReposity.deleteAll();
         tracksChartReposity.save(restService.getMostRecentTracks());
         System.out.println("TracksChart added");
-        kafkaTemplate.send(kafkaTopic, "TracksAdded");
     }
 
     @Scheduled(fixedRate=30000)
@@ -63,14 +62,16 @@ public class DBController {
 
         //trackReposity.deleteAll();
         List<Track> tracks = restService.getMostRecentTracks().getRecenttracks().getTrack();
+        System.out.println("ola");
+        System.out.println(tracks.get(0).toString());
+        System.out.println("ola");
         tracks.forEach(t -> {
             if (t != null) {
                 trackReposity.save(t);
             }
         });
-
         System.out.println("Tracks Added");
-
+        kafkaTemplate.send(kafkaTopic, "Ultima musica: " + tracks.get(0).getName());
     }
     @Scheduled(fixedRate=30000)
     public void addDateTrack() {
@@ -83,6 +84,7 @@ public class DBController {
             }
         });
         System.out.println("Date Added");
+        kafkaTemplate.send(kafkaTopic, "Data: " + dateTracks.get(0).getDate().getText());
     }
 
     @Scheduled(fixedRate=30000)
